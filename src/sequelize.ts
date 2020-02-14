@@ -5,13 +5,18 @@ import { Dialect, ModelCtor } from 'sequelize'
 import configs from '../config/database.json'
 import * as models from './models'
 
-const env = 'development'
+const env = (process.env.NODE_ENV as 'development' | 'test' | 'production') || 'development'
 const config: SequelizeOptions = {
   ...configs[env],
   dialect: configs[env].dialect as Dialect
 }
 
-const sequelize = new Sequelize(config)
+let sequelize: Sequelize
+if (process.env.DATABASE_URL) {
+  sequelize = new Sequelize(process.env.DATABASE_URL, config)
+} else {
+  sequelize = new Sequelize(config)
+}
 
 export let serializer = new Serializer({
   baseUrl: (process.env.APP_HOST || 'http://localhost:8080') + '/api'
