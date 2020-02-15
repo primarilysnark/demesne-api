@@ -11,19 +11,19 @@ export let serializer = new Serializer({
 })
 
 export async function setup<T extends JsonApiModel<T>>() {
-  const env =
-    (process.env.NODE_ENV as 'development' | 'test' | 'production') ||
-    'development'
-
-  const configs = await import('../config/database.json')
-  const config: SequelizeOptions = {
-    ...configs[env],
-    dialect: configs[env].dialect as Dialect
-  }
-
   if (process.env.DATABASE_URL) {
-    sequelize = new Sequelize(process.env.DATABASE_URL, config)
+    sequelize = new Sequelize(process.env.DATABASE_URL)
   } else {
+    const env =
+      (process.env.NODE_ENV as 'development' | 'test' | 'production') ||
+      'development'
+
+    const configs = require('../config/database.json')
+    const config: SequelizeOptions = {
+      ...configs[env],
+      dialect: configs[env].dialect as Dialect
+    }
+
     sequelize = new Sequelize(config)
   }
 
