@@ -11,7 +11,7 @@
     "format": "prettier --write './{src,src}/**/*.{ts,tsx}'",
     "lint": "tslint -c tslint.json --fix 'src/**/*.tsx'",
     "predev:watch": "npm run build",
-    "start": "node dist/src/index.js"
+    "start": "node ."
   },
   "repository": {
     "type": "git",
