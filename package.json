@@ -5,11 +5,12 @@
   "main": "dist/src/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --watch src -e ts --exec npm start",
-    "lint": "tslint -c tslint.json --fix 'src/**/*.tsx'",
-    "format": "prettier --write './{src,src}/**/*.{ts,tsx}'",
+    "dev:watch": "npm start",
+    "dev": "nodemon --watch src -e ts --exec npm run dev:watch",
     "format:check": "prettier -c './{src,src}/**/*.{ts,tsx}'",
-    "prestart": "npm run build",
+    "format": "prettier --write './{src,src}/**/*.{ts,tsx}'",
+    "lint": "tslint -c tslint.json --fix 'src/**/*.tsx'",
+    "predev:watch": "npm run build",
     "start": "node dist/src/index.js"
   },
   "repository": {
