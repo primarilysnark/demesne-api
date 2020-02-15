@@ -2,7 +2,7 @@
   "name": "@primarilysnark/demesne-api",
   "version": "1.0.0",
   "description": "Companion API to Demesne",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "dev:watch": "npm start",
