@@ -1,10 +1,11 @@
 import { Op } from 'sequelize'
 
+import { IMiddlewareCollection } from '../middleware'
 import { Hex, Map } from '../models'
 import { serializer } from '../sequelize'
 import * as websocket from './websocket'
 
-export function getRouter() {
+export function getRouter(_middleware: IMiddlewareCollection) {
   const router = websocket.Router('/')
 
   router.onMessage(

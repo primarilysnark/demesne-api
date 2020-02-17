@@ -1,6 +1,8 @@
 import express from 'express'
 
-export function getRouter() {
+import { IMiddlewareCollection } from '../middleware'
+
+export function getRouter(_middelware: IMiddlewareCollection) {
   const router = express.Router()
 
   router.get('/', (_req, res) => {
