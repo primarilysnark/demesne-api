@@ -13,6 +13,8 @@ export function getRouter(middleware: IMiddlewareCollection) {
     middleware.filter,
     async (_req, res) => {
       const rooms = await Room.findAll({
+        limit: res.locals.pagination.limit,
+        offset: res.locals.pagination.offset * res.locals.pagination.limit,
         order: ['id', 'name'],
         where: res.locals.filter
       })
