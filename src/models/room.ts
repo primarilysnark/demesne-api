@@ -34,7 +34,7 @@ export class Room extends JsonApiModel<Room> {
   public name!: string
 
   @AllowNull(false)
-  @Column
+  @Column(DataTypes.TEXT)
   public description!: string
 
   @Column
@@ -107,6 +107,13 @@ export class Room extends JsonApiModel<Room> {
     }
   }
 
+  public set cost(valueToSet: IRoomCost) {
+    this.setDataValue('costGoods', valueToSet.goods)
+    this.setDataValue('costInfluence', valueToSet.influence)
+    this.setDataValue('costLabor', valueToSet.labor)
+    this.setDataValue('costMagic', valueToSet.magic)
+  }
+
   public get earnings(): IRoomEarnings {
     return {
       goods: this.getDataValue('earnGoods'),
@@ -117,10 +124,23 @@ export class Room extends JsonApiModel<Room> {
     }
   }
 
+  public set earnings(valueToSet: IRoomEarnings) {
+    this.setDataValue('earnGoods', valueToSet.goods)
+    this.setDataValue('earnInfluence', valueToSet.influence)
+    this.setDataValue('earnLabor', valueToSet.labor)
+    this.setDataValue('earnMagic', valueToSet.magic)
+    this.setDataValue('earnGp', valueToSet.gp)
+  }
+
   public get size(): IRoomSize {
     return {
       minimum: this.getDataValue('minimumSize'),
       maximum: this.getDataValue('maximumSize')
     }
+  }
+
+  public set size(valueToSet: IRoomSize) {
+    this.setDataValue('minimumSize', valueToSet.minimum)
+    this.setDataValue('maximumSize', valueToSet.maximum)
   }
 }
