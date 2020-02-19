@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser'
 import express from 'express'
 
 import * as controllers from './controllers'
@@ -10,6 +11,7 @@ export async function getRouter() {
   const app = express.Router()
   const middleware = buildMiddleware()
 
+  app.use(bodyParser.json())
   app.use(middleware.serializer)
 
   app.use('/', controllers.meta.getRouter(middleware))
