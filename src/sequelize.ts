@@ -35,5 +35,7 @@ export async function setup<T extends JsonApiModel<T>>() {
     sequelize.models
   ) as unknown) as JsonApiModel<T>[]
 
-  return Promise.all(jsonApiModels.map(model => serializer.define(model)))
+  return Promise.all(
+    jsonApiModels.map(model => serializer.define(model, sequelize))
+  )
 }

@@ -15,6 +15,7 @@ export async function getRouter() {
   app.use(middleware.serializer)
 
   app.use('/', controllers.meta.getRouter(middleware))
+  app.use('/buildings', controllers.buildings.getRouter(middleware))
   app.use('/map', controllers.map.getRouter(middleware))
   app.use('/rooms', controllers.rooms.getRouter(middleware))
 

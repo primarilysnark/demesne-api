@@ -4,8 +4,7 @@ import {
   BelongsTo,
   Column,
   DataType,
-  Table,
-  HasOne
+  Table
 } from 'sequelize-typescript'
 import { Map } from './map'
 

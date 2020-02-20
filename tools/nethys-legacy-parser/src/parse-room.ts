@@ -75,7 +75,9 @@ function parseRoomAttributeNode(room: Room, node: Element) {
         break
 
       case 'Time':
-        const timeText = strongElement.nextSibling.textContent.trim().match(/\d+/)
+        const timeText = strongElement.nextSibling.textContent
+          .trim()
+          .match(/\d+/)
 
         if (timeText) {
           room.time = parseInt(timeText[0], 10)
@@ -97,7 +99,11 @@ export function parseRoomsAndTeams(dom: JSDOM) {
 
   const rooms = []
   let room: Room
-  while(node != null && (node.nodeType !== Node.ELEMENT_NODE || (node as Element).id !== 'room-augmentations')) {
+  while (
+    node != null &&
+    (node.nodeType !== Node.ELEMENT_NODE ||
+      (node as Element).id !== 'room-augmentations')
+  ) {
     if (node.nodeType === Node.ELEMENT_NODE) {
       const element = node as Element
 
