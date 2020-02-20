@@ -23,6 +23,14 @@ export function getRouter(middleware: IMiddlewareCollection) {
     }
   )
 
+  router.post('/', async (req, res) => {
+    const building = await Building.create({
+      name: req.body.data.attributes.name
+    })
+
+    return res.status(201).serialize(building)
+  })
+
   router.get('/:buildingId', async (req, res) => {
     const building = await Building.findOne({
       where: {
@@ -39,12 +47,24 @@ export function getRouter(middleware: IMiddlewareCollection) {
     return res.serialize(building)
   })
 
-  router.post('/', async (req, res) => {
-    const building = await Building.create({
+  router.post('/:buildingId', async (req, res) => {
+    let building = await Building.findOne({
+      where: {
+        id: {
+          [Op.eq]: req.params.buildingId
+        }
+      }
+    })
+
+    if (!building) {
+      return res.sendStatus(404)
+    }
+
+    building = await building.update({
       name: req.body.data.attributes.name
     })
 
-    return res.status(201).serialize(building)
+    return res.status(200).serialize(building)
   })
 
   return router
