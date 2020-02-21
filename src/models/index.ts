@@ -1,5 +1,5 @@
 export * from './building'
-export * from './building-room-association'
+export * from './building-entry'
 export * from './hex'
 export * from './map'
 export * from './room'

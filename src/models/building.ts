@@ -1,23 +1,22 @@
 import {
-  JsonApiMeta,
   JsonApiModel,
+  JsonApiRelationship,
   JsonApiSchema
 } from '@primarilysnark/sequelize-json-api'
 import {
   AllowNull,
   Column,
   DefaultScope,
-  Table,
-  BelongsToMany
+  HasMany,
+  Table
 } from 'sequelize-typescript'
-import { BuildingRoomAssociation } from './building-room-association'
-import { Room } from './room'
+import { BuildingEntry } from './building-entry'
 
 @DefaultScope({
   include: [
     {
-      as: 'rooms',
-      model: () => Room
+      as: 'buildingEntries',
+      model: () => BuildingEntry
     }
   ]
 })
@@ -28,12 +27,9 @@ export class Building extends JsonApiModel<Building> {
   @Column
   public name!: string
 
-  @JsonApiMeta('allocation', 'earningAllocation')
-  @BelongsToMany(
-    () => Room,
-    () => BuildingRoomAssociation,
-    'buildingId',
-    'roomId'
-  )
-  public rooms: Room[]
+  @JsonApiRelationship(BuildingEntry, {
+    allocation: 'earningAllocation'
+  })
+  @HasMany(() => BuildingEntry, 'buildingId')
+  public buildingEntries: BuildingEntry[]
 }
