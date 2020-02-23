@@ -13,7 +13,6 @@ import {
   PrimaryKey,
   Table
 } from 'sequelize-typescript'
-import { Building } from './building'
 import { Room } from './room'
 
 enum EarningAllocation {
@@ -35,23 +34,23 @@ enum EarningAllocation {
 @JsonApiSchema('building-entries')
 @Table
 export class BuildingEntry extends JsonApiModel<BuildingEntry> {
-  @AllowNull(false)
-  @PrimaryKey
-  @Column(DataType.INTEGER)
-  public id!: number
-
   @JsonApiIgnore
   @AllowNull(false)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    references: {
+      model: 'Buildings',
+      key: 'id'
+    },
+    onUpdate: 'cascade',
+    onDelete: 'cascade'
+  })
   public buildingId!: number
 
   @JsonApiIgnore
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public roomId!: number
-
-  @BelongsTo(() => Building, 'id')
-  public building: Building
 
   @JsonApiRelationship(Room)
   @BelongsTo(() => Room, 'roomId')
