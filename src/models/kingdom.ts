@@ -10,9 +10,11 @@ import {
   Table,
   BelongsTo,
   DefaultScope,
-  DataType
+  DataType,
+  HasMany
 } from 'sequelize-typescript'
 import { Alignment } from './alignment'
+import { Character } from './character'
 
 @DefaultScope({
   include: [
@@ -50,4 +52,8 @@ export class Kingdom extends JsonApiModel<Kingdom> {
   @JsonApiRelationship(Alignment)
   @BelongsTo(() => Alignment, 'goodEvilAlignmentId')
   public goodEvilAxisAlignment: Alignment
+
+  @JsonApiRelationship(Kingdom)
+  @HasMany(() => Character, 'kingdomId')
+  public characters!: Character[]
 }

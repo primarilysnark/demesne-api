@@ -1,7 +1,7 @@
 import express from 'express'
 import { Op } from 'sequelize'
 
-import { Kingdom } from '../models'
+import { Kingdom, Character } from '../models'
 import { IMiddlewareCollection } from '../middleware'
 
 export function getRouter(middleware: IMiddlewareCollection) {
@@ -37,6 +37,55 @@ export function getRouter(middleware: IMiddlewareCollection) {
     }
 
     return res.serialize(kingdom)
+  })
+
+  router.get('/:kingdomId/characters', async (req, res) => {
+    const kingdom = await Kingdom.findOne({
+      where: {
+        id: {
+          [Op.eq]: req.params.kingdomId
+        }
+      }
+    })
+
+    if (!kingdom) {
+      return res.sendStatus(404)
+    }
+
+    const characters = await kingdom.$get('characters')
+
+    return res.serialize(characters)
+  })
+
+  router.get('/:kingdomId/characters/:characterId', async (req, res) => {
+    const kingdom = await Kingdom.findOne({
+      where: {
+        id: {
+          [Op.eq]: req.params.kingdomId
+        }
+      }
+    })
+
+    if (!kingdom) {
+      return res.sendStatus(404)
+    }
+
+    const character = await Character.findOne({
+      where: {
+        id: {
+          [Op.eq]: req.params.characterId
+        },
+        kingdomId: {
+          [Op.eq]: kingdom.id
+        }
+      }
+    })
+
+    if (!character) {
+      return res.sendStatus(404)
+    }
+
+    return res.serialize(character)
   })
 
   return router
