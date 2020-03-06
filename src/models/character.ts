@@ -14,6 +14,15 @@ import {
 } from 'sequelize-typescript'
 import { Kingdom } from './kingdom'
 
+interface ICharacterAbilityScoreModifiers {
+  strength: number
+  dexterity: number
+  constitution: number
+  intelligence: number
+  wisdom: number
+  charisma: number
+}
+
 @DefaultScope({
   include: [
     {
@@ -33,26 +42,32 @@ export class Character extends JsonApiModel<Character> {
   @Column
   public tagline!: string
 
+  @JsonApiIgnore
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public strengthModifier!: number
 
+  @JsonApiIgnore
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public dexterityModifier!: number
 
+  @JsonApiIgnore
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public constitutionModifier!: number
 
+  @JsonApiIgnore
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public intelligenceModifier!: number
 
+  @JsonApiIgnore
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public wisdomModifier!: number
 
+  @JsonApiIgnore
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public charismaModifier!: number
@@ -65,4 +80,15 @@ export class Character extends JsonApiModel<Character> {
   @JsonApiRelationship(Kingdom)
   @BelongsTo(() => Kingdom, 'kingdomId')
   public kingdom!: Kingdom
+
+  public get abilityScoreModifiers(): ICharacterAbilityScoreModifiers {
+    return {
+      strength: this.getDataValue('strengthModifier'),
+      dexterity: this.getDataValue('dexterityModifier'),
+      constitution: this.getDataValue('constitutionModifier'),
+      intelligence: this.getDataValue('intelligenceModifier'),
+      wisdom: this.getDataValue('wisdomModifier'),
+      charisma: this.getDataValue('charismaModifier')
+    }
+  }
 }
