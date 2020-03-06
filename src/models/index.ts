@@ -1,3 +1,4 @@
+export * from './alignment'
 export * from './building'
 export * from './building-entry'
 export * from './hex'
