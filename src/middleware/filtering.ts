@@ -11,6 +11,19 @@ interface FilterMap {
   [key: string]: string | Filter
 }
 
+function tryParseBoolean(value: string) {
+  switch (value) {
+    case 'true':
+      return true
+
+    case 'false':
+      return false
+
+    default:
+      return value
+  }
+}
+
 function parse(filterMap: FilterMap) {
   const filters = new Map(
     Object.keys(filterMap).map(filterKey => [filterKey, filterMap[filterKey]])
@@ -31,10 +44,21 @@ function parse(filterMap: FilterMap) {
         : value.split(',')
 
       if (values.length === 1) {
-        parsedFilter = {
-          ...parsedFilter,
-          [key]: {
-            [Op.iLike]: values[0]
+        const parsedValue = tryParseBoolean(values[0])
+
+        if (typeof parsedValue === 'boolean') {
+          parsedFilter = {
+            ...parsedFilter,
+            [key]: {
+              [Op.eq]: parsedValue
+            }
+          }
+        } else {
+          parsedFilter = {
+            ...parsedFilter,
+            [key]: {
+              [Op.iLike]: parsedValue
+            }
           }
         }
       } else {
@@ -42,7 +66,7 @@ function parse(filterMap: FilterMap) {
           ...parsedFilter,
           [key]: {
             [Op.iLike]: {
-              [Op.any]: values
+              [Op.any]: values.map(tryParseBoolean)
             }
           }
         }
