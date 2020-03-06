@@ -18,6 +18,10 @@ export async function getRouter() {
   app.use('/alignments', controllers.alignments.getRouter(middleware))
   app.use('/buildings', controllers.buildings.getRouter(middleware))
   app.use('/kingdoms', controllers.kingdoms.getRouter(middleware))
+  app.use(
+    '/leadership-roles',
+    controllers.leadershipRoles.getRouter(middleware)
+  )
   app.use('/map', controllers.map.getRouter(middleware))
   app.use('/rooms', controllers.rooms.getRouter(middleware))
 
