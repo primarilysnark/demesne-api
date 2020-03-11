@@ -10,9 +10,11 @@ import {
   Column,
   DataType,
   DefaultScope,
-  Table
+  Table,
+  HasOne
 } from 'sequelize-typescript'
 import { Kingdom } from './kingdom'
+import { CharacterLeadershipRoleAssociation } from './character-leadership-role-association'
 
 interface ICharacterAbilityScoreModifiers {
   strength: number
@@ -28,6 +30,10 @@ interface ICharacterAbilityScoreModifiers {
     {
       as: 'kingdom',
       model: () => Kingdom
+    },
+    {
+      as: 'leadershipAssignment',
+      model: () => CharacterLeadershipRoleAssociation
     }
   ]
 })
@@ -77,9 +83,22 @@ export class Character extends JsonApiModel<Character> {
   @Column(DataType.INTEGER)
   public kingdomId!: number
 
-  @JsonApiRelationship(Kingdom)
+  @JsonApiRelationship(() => Kingdom)
   @BelongsTo(() => Kingdom, 'kingdomId')
   public kingdom!: Kingdom
+
+  @JsonApiRelationship(
+    () => CharacterLeadershipRoleAssociation,
+    'leadershipRole',
+    {
+      assignedTurn: 'assignedTurn',
+      selectedAbilityScore: 'selectedAbilityScore',
+      selectedKingdomAttributes: 'selectedKingdomAttributes',
+      vacatedTurn: 'vacatedTurn'
+    }
+  )
+  @HasOne(() => CharacterLeadershipRoleAssociation, 'characterId')
+  public leadershipAssignment!: CharacterLeadershipRoleAssociation
 
   public get abilityScoreModifiers(): ICharacterAbilityScoreModifiers {
     return {

@@ -27,7 +27,7 @@ export class Building extends JsonApiModel<Building> {
   @Column
   public name!: string
 
-  @JsonApiRelationship(BuildingEntry, {
+  @JsonApiRelationship(() => BuildingEntry, {
     allocation: 'earningAllocation'
   })
   @HasMany(() => BuildingEntry, 'buildingId')

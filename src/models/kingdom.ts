@@ -45,15 +45,15 @@ export class Kingdom extends JsonApiModel<Kingdom> {
   @Column(DataType.INTEGER)
   public goodEvilAlignmentId!: number
 
-  @JsonApiRelationship(Alignment)
+  @JsonApiRelationship(() => Alignment)
   @BelongsTo(() => Alignment, 'lawChaosAlignmentId')
   public lawChaosAxisAlignment: Alignment
 
-  @JsonApiRelationship(Alignment)
+  @JsonApiRelationship(() => Alignment)
   @BelongsTo(() => Alignment, 'goodEvilAlignmentId')
   public goodEvilAxisAlignment: Alignment
 
-  @JsonApiRelationship(Kingdom)
+  @JsonApiRelationship(() => Character)
   @HasMany(() => Character, 'kingdomId')
   public characters!: Character[]
 }

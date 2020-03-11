@@ -24,7 +24,7 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "@primarilysnark/sequelize-json-api": "^0.3.1",
+    "@primarilysnark/sequelize-json-api": "^0.3.3",
     "body-parser": "^1.19.0",
     "consola": "^2.11.3",
     "cors": "^2.8.5",

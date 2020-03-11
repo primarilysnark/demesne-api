@@ -1,14 +1,6 @@
 import { JsonApiModel, JsonApiSchema } from '@primarilysnark/sequelize-json-api'
 import { AllowNull, Column, Table, DataType } from 'sequelize-typescript'
-
-enum AbilityScore {
-  Strength = 'strength',
-  Dexterity = 'dexterity',
-  Constitution = 'constitution',
-  Intelligence = 'intelligence',
-  Wisdom = 'wisdom',
-  Charisma = 'charisma'
-}
+import { AbilityScore } from '../constants'
 
 @JsonApiSchema('leadership-roles')
 @Table

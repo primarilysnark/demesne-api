@@ -52,7 +52,7 @@ export class BuildingEntry extends JsonApiModel<BuildingEntry> {
   @Column(DataType.INTEGER)
   public roomId!: number
 
-  @JsonApiRelationship(Room)
+  @JsonApiRelationship(() => Room)
   @BelongsTo(() => Room, 'roomId')
   public room: Room
 
