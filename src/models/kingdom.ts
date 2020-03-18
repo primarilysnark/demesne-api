@@ -15,6 +15,7 @@ import {
 } from 'sequelize-typescript'
 import { Alignment } from './alignment'
 import { Character } from './character'
+import { KingdomTurnAction } from './kingdom-turn-action'
 
 @DefaultScope({
   include: [
@@ -25,6 +26,10 @@ import { Character } from './character'
     {
       as: 'goodEvilAxisAlignment',
       model: () => Alignment
+    },
+    {
+      as: 'turnActions',
+      model: () => KingdomTurnAction
     }
   ]
 })
@@ -56,4 +61,8 @@ export class Kingdom extends JsonApiModel<Kingdom> {
   @JsonApiRelationship(() => Character)
   @HasMany(() => Character, 'kingdomId')
   public characters!: Character[]
+
+  @JsonApiRelationship(() => KingdomTurnAction)
+  @HasMany(() => KingdomTurnAction, 'kingdomId')
+  public turnActions!: KingdomTurnAction[]
 }
