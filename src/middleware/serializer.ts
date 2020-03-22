@@ -1,6 +1,14 @@
 import { JsonApiModel } from '@primarilysnark/sequelize-json-api'
 import { NextFunction, Request, Response } from 'express'
 import { serializer } from '../sequelize'
+import { ValidationError as JoiValidationError } from 'joi'
+import { ValidationError as SequelizeValidationError } from 'sequelize/types'
+
+function isJoiValidationError(
+  model: JoiValidationError | SequelizeValidationError
+): model is JoiValidationError {
+  return (model as JoiValidationError).isJoi !== undefined
+}
 
 declare global {
   namespace Express {
@@ -10,6 +18,7 @@ declare global {
         model: T | T[],
         options?: object
       ) => void
+      error: (error: JoiValidationError | SequelizeValidationError) => void
     }
   }
 }
@@ -45,6 +54,32 @@ export function middleware() {
       }
 
       return res.json(payload)
+    }
+
+    res.error = (error: JoiValidationError | SequelizeValidationError) => {
+      if (isJoiValidationError(error)) {
+        return res.status(400).json({
+          errors: error.details.map(detail => ({
+            status: '400',
+            source: {
+              pointer: `/data/attributes/${detail.path.join('/')}`
+            },
+            title: detail.type,
+            details: detail.message
+          }))
+        })
+      }
+
+      return res.status(400).json({
+        errors: error.errors.map(detail => ({
+          status: '400',
+          source: {
+            pointer: `/data/attributes/${detail.path}`
+          },
+          title: detail.type,
+          details: detail.message
+        }))
+      })
     }
 
     return next()

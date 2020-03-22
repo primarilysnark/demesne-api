@@ -28,7 +28,7 @@ import { Character } from './character'
     }
   ]
 })
-@JsonApiSchema('kingdom-summaries')
+@JsonApiSchema('kingdoms')
 @Table
 export class KingdomSummary extends JsonApiModel<KingdomSummary> {
   @AllowNull(false)

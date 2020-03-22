@@ -1,7 +1,13 @@
 import express from 'express'
-import { Op } from 'sequelize'
+import { Op, ValidationError } from 'sequelize'
 
-import { Character, Kingdom, KingdomSummary } from '../models'
+import {
+  Character,
+  Kingdom,
+  KingdomSummary,
+  KingdomTurnAction,
+  KingdomTurnActionSchema
+} from '../models'
 import { IMiddlewareCollection } from '../middleware'
 
 export function getRouter(middleware: IMiddlewareCollection) {
@@ -86,6 +92,76 @@ export function getRouter(middleware: IMiddlewareCollection) {
     }
 
     return res.serialize(character)
+  })
+
+  router.get('/:kingdomId/actions/', async (req, res) => {
+    const kingdom = await Kingdom.findOne({
+      where: {
+        id: {
+          [Op.eq]: req.params.kingdomId
+        }
+      }
+    })
+
+    if (!kingdom) {
+      return res.sendStatus(404)
+    }
+
+    const turnActions = await KingdomTurnAction.findAll({
+      where: {
+        kingdomId: {
+          [Op.eq]: kingdom.id
+        }
+      }
+    })
+
+    if (!turnActions) {
+      return res.sendStatus(404)
+    }
+
+    return res.serialize(turnActions)
+  })
+
+  router.post('/:kingdomId/actions/', async (req, res) => {
+    const kingdom = await Kingdom.findOne({
+      where: {
+        id: {
+          [Op.eq]: req.params.kingdomId
+        }
+      }
+    })
+
+    if (!kingdom) {
+      return res.sendStatus(404)
+    }
+
+    let result
+    try {
+      result = await KingdomTurnActionSchema.validate(
+        req.body.data.attributes,
+        {
+          abortEarly: false,
+          convert: false
+        }
+      )
+    } catch (err) {
+      return res.error(err)
+    }
+
+    try {
+      const kingdomTurnAction = await KingdomTurnAction.create({
+        ...result,
+        kingdomId: kingdom.id
+      })
+
+      return res.serialize(kingdomTurnAction)
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        return res.error(err)
+      }
+
+      throw err
+    }
   })
 
   return router
