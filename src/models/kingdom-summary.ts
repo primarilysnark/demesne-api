@@ -76,4 +76,8 @@ export class KingdomSummary extends JsonApiModel<KingdomSummary> {
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public unrest!: number
+
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
+  public controlDC!: number
 }

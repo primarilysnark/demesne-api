@@ -7,6 +7,7 @@ import {
   Table
 } from 'sequelize-typescript'
 import { Map } from './map'
+import { Kingdom } from './kingdom'
 
 @JsonApiSchema('hexes')
 @Table
@@ -23,6 +24,16 @@ export class Hex extends JsonApiModel<Hex> {
   @Column
   public terrain!: string
 
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
+  public mapId!: number
+
+  @Column(DataType.INTEGER)
+  public kingdomId: number
+
   @BelongsTo(() => Map, 'mapId')
   public map!: Map
+
+  @BelongsTo(() => Kingdom, 'kingdomId')
+  public kingdom: Kingdom
 }
