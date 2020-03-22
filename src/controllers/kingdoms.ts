@@ -1,7 +1,7 @@
 import express from 'express'
 import { Op } from 'sequelize'
 
-import { Kingdom, Character } from '../models'
+import { Character, Kingdom, KingdomSummary } from '../models'
 import { IMiddlewareCollection } from '../middleware'
 
 export function getRouter(middleware: IMiddlewareCollection) {
@@ -12,7 +12,7 @@ export function getRouter(middleware: IMiddlewareCollection) {
     middleware.pagination,
     middleware.filter,
     async (_req, res) => {
-      const kingdoms = await Kingdom.findAll({
+      const kingdoms = await KingdomSummary.findAll({
         limit: res.locals.pagination.limit,
         offset: res.locals.pagination.offset * res.locals.pagination.limit,
         order: ['id', 'name'],
@@ -24,7 +24,7 @@ export function getRouter(middleware: IMiddlewareCollection) {
   )
 
   router.get('/:kingdomId', async (req, res) => {
-    const kingdom = await Kingdom.findOne({
+    const kingdom = await KingdomSummary.findOne({
       where: {
         id: {
           [Op.eq]: req.params.kingdomId
