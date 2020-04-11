@@ -5,5 +5,15 @@ import * as leadershipRoles from './leadership-roles'
 import * as map from './map'
 import * as meta from './meta'
 import * as rooms from './rooms'
+import * as users from './users'
 
-export { alignments, buildings, kingdoms, leadershipRoles, map, meta, rooms }
+export {
+  alignments,
+  buildings,
+  kingdoms,
+  leadershipRoles,
+  map,
+  meta,
+  rooms,
+  users
+}
